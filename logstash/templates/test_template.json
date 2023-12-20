@@ -1,0 +1,118 @@
+{
+  "index_templates": {
+    "content-template": {
+      "index_patterns": ["contents*"],
+      "template": {
+        "settings": {
+          "number_of_shards": "48",
+          "number_of_replicas": "0"
+        },
+        "aliases": {}
+      },
+      "template_composition": {
+        "index_template": {
+          "template": "content-template",
+          "priority": 1
+        },
+        "template": {
+          "settings": {
+            "analysis": {
+              "filter": {
+                "custom_shingle_filter": {
+                  "max_shingle_size": "3",
+                  "min_shingle_size": "2",
+                  "type": "shingle"
+                }
+              },
+              "char_filter": {
+                "default_character_filter": {
+                  "type": "html_strip"
+                }
+              },
+              "analyzer": {
+                "whitespace_analyzer": {
+                  "filter": [
+                    "lowercase",
+                    "word_delimiter",
+                    "custom_shingle_filter"
+                  ],
+                  "char_filter": ["html_strip"],
+                  "type": "custom",
+                  "tokenizer": "whitespace"
+                },
+                "nori_analyzer": {
+                  "filter": ["lowercase"],
+                  "char_filter": ["html_strip"],
+                  "type": "custom",
+                  "tokenizer": "korean_nori_tokenizer"
+                }
+              },
+              "tokenizer": {
+                "korean_nori_tokenizer": {
+                  "type": "nori_tokenizer",
+                  "decompound_mode": "mixed"
+                },
+                "custom-edge-ngram": {
+                  "token_chars": ["letter", "digit"],
+                  "min_gram": "1",
+                  "type": "edge_ngram",
+                  "max_gram": "10"
+                }
+              }
+            }
+          },
+          "mappings": {
+            "properties": {
+              "content": {
+                "type": "text",
+                "fields": {
+                  "search": {
+                    "type": "search_as_you_type",
+                    "doc_values": false,
+                    "max_shingle_size": 3,
+                    "analyzer": "whitespace_analyzer",
+                    "search_analyzer": "whitespace_analyzer",
+                    "search_quote_analyzer": "standard"
+                  }
+                },
+                "analyzer": "nori_analyzer",
+                "search_analyzer": "nori_analyzer",
+                "search_quote_analyzer": "standard"
+              },
+              "id": {
+                "type": "long",
+                "ignore_malformed": false,
+                "coerce": true
+              },
+              "time": {
+                "type": "date"
+              },
+              "title": {
+                "type": "text",
+                "fields": {
+                  "search": {
+                    "type": "search_as_you_type",
+                    "doc_values": false,
+                    "max_shingle_size": 3,
+                    "analyzer": "whitespace_analyzer",
+                    "search_analyzer": "whitespace_analyzer",
+                    "search_quote_analyzer": "standard"
+                  }
+                },
+                "analyzer": "nori_analyzer",
+                "search_analyzer": "nori_analyzer",
+                "search_quote_analyzer": "standard"
+              },
+              "writer": {
+                "type": "text",
+                "analyzer": "nori_analyzer",
+                "search_analyzer": "nori_analyzer",
+                "search_quote_analyzer": "standard"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "template": "keyword_template",
+  "order": 1,
+  "index_patterns": "keywords*",
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "custom_standard": {
+          "type": "standard"
+        },
+        "korean_nori_tokenizer": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed"
+        }
+      },
+      "filter": {
+        "custom_ngram": {
+          "type": "edge_ngram",
+          "min_gram": "1",
+          "max_gram": "15"
+        }
+      },
+      "analyzer": {
+        "custom_nori_analyzer": {
+          "filter": ["lowercase"],
+          "char_filter": ["html_strip"],
+          "tokenizer": "korean_nori_tokenizer"
+        },
+        "custom_ngram_analyzer": {
+          "filter": ["lowercase", "custom_ngram"],
+          "char_filter": ["html_strip"],
+          "tokenizer": "custom_standard"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "keyword": {
+        "eager_global_ordinals": false,
+        "index_phrases": false,
+        "search_quote_analyzer": "standard",
+        "fielddata": false,
+        "norms": true,
+        "analyzer": "custom_ngram_analyzer",
+        "index": true,
+        "store": false,
+        "type": "text",
+        "fields": {
+          "suggest": {
+            "analyzer": "standard",
+            "preserve_position_increments": true,
+            "type": "completion",
+            "preserve_separators": true
+          },
+          "korean": {
+            "eager_global_ordinals": false,
+            "index_phrases": false,
+            "search_quote_analyzer": "standard",
+            "fielddata": false,
+            "norms": true,
+            "analyzer": "custom_nori_analyzer",
+            "index": true,
+            "store": false,
+            "type": "text",
+            "index_options": "positions"
+          }
+        },
+        "index_options": "positions"
+      }
+    }
+  }
+}
