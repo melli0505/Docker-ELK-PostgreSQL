@@ -1,0 +1,5 @@
+users:
+  - username: "logstash_internal"
+    password: "logstash"
+    roles:
+      - "logstash_writer"
