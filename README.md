@@ -4,7 +4,6 @@ Monitor PostgreSQL Data Table and logging data to elasticsearch system with comp
 
 ## Docker ELK
 
-> [!INFO]
 > This repository based on the Docker ELK implementation by deviantony(https://github.com/deviantony/docker-elk)
 
 Run the latest version(8.8.1) of the Elastic stack with Docker and Docker Compose.
@@ -79,7 +78,7 @@ roles_files=(
 - You have to create your own Index Template which is matched with your Data Table.
 - Analyzer / Tokenizer / Filter and Mapping information should be included.
 - You can find composable index template examples under `logstash/templates`.
-  > [!WARNING]
+
   > If your elastic version > 7.8.x, you have to use composable format index template. If not, legacy index format is okay.
   > For more information, please see documentation(https://www.elastic.co/guide/en/elasticsearch/reference/current/index-templates.html)
 
